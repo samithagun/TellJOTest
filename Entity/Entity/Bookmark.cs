@@ -22,5 +22,9 @@ namespace Entity
         public virtual Category Category { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public string UserId { get; set; }
+
+        public ApplicationUser User { get; set; }
     }
 }
