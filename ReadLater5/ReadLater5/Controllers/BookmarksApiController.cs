@@ -32,6 +32,11 @@ namespace ReadLater5.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Return JWT token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -48,6 +53,10 @@ namespace ReadLater5.Controllers
             return Unauthorized();
         }
 
+        /// <summary>
+        /// Get Bookmarks belongs to user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetBookmarks")]
         public IActionResult GetBookmarks()
         {
