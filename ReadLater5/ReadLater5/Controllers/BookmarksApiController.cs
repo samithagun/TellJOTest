@@ -1,7 +1,5 @@
 ﻿using Entity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -56,12 +54,11 @@ namespace ReadLater5.Controllers
             var currentUser = _userManager.GetUserAsync(User).Result;
 
             if (currentUser == null)
-            {
                 return Unauthorized();
-            }
 
             var bookmarks = _context.Bookmark
                 .Where(b => b.UserId == currentUser.Id)
+                .Select(b => new { b.ID, b.URL, b.ShortDescription, b.CategoryId, b.CreateDate })
                 .ToList();
 
             return Ok(bookmarks);
@@ -74,9 +71,9 @@ namespace ReadLater5.Controllers
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
